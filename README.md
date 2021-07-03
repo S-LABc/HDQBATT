@@ -1,5 +1,5 @@
 # HDQBATT
-![Header Picture](.images/header.jpg)
+![Header Picture](images/header.jpg)
 
 ## Содержание
 * [Описание](#описание)
