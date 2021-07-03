@@ -201,7 +201,7 @@ bool setTimeFailTries(uint16_t new_delay);
 ```
 
 ## Установка
-Скачать ZIP-архив этого репозитория. Запустить [Arduino IDE](https://www.arduino.cc/en/software). Выбрать *Скетч* -> *Подключить библиотеку* -> *Добавить .ZIP библиотеку*. В появившемся окне выбрать скаченный архив. Более [наглядная инструкция](https://wiki.iarduino.ru/page/Installing_libraries).
+[Скачать ZIP-архив](https://github.com/S-LABc/HDQBATT/archive/refs/heads/main.zip) этого репозитория. Запустить [Arduino IDE](https://www.arduino.cc/en/software). Выбрать *Скетч* -> *Подключить библиотеку* -> *Добавить .ZIP библиотеку*. В появившемся окне выбрать скаченный архив. Более [наглядная](https://wiki.iarduino.ru/page/Installing_libraries) инструкция. Изучите скетч из примеров, в нем показано важное.
 
 ## Подключение АКБ
 * Для корректной передачи данных, необходимо между контактом **HDQ** и **+VBATT** АКБ подключить резистор  номиналом 4.7кОм - 10кОм.
