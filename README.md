@@ -11,7 +11,7 @@
 * [Дополнительная документация](#дополнительная-документация)
 
 ## Описание
-* Библиотека для [Arduino IDE](https://www.arduino.cc/en/software), которая позволяет получить доступ к некоторым [основным](#основные-методы) функциям ([API](https://ru.wikipedia.org/wiki/API)) 
+* Библиотека для [Arduino IDE](https://www.arduino.cc/en/software), сделана в виде класса. Позволяет получить доступ к некоторым [основным](#основные-методы) функциям ([API](https://ru.wikipedia.org/wiki/API)) 
 контроллера [bq27546](https://www.ti.com/product/BQ27546-G1) от компании [Texas Instruments](https://www.ti.com/), используя для связи интерфейс [HDQ](https://www.ti.com/lit/an/slua408a/slua408a.pdf).
 * *Можно* использовать для подключения к другим контроллерам семейства bq2754x, 
 например [bq27541](https://www.ti.com/product/BQ27541-G1) или [bq27545](https://www.ti.com/product/BQ27545-G1), но адреса регистров и их названия будут отличатся. 
@@ -26,7 +26,7 @@ digitalRead();
 digitalWrite();
 delayMicroseconds();
 ```
-* Библиотека позволяет читать информацию с АКБ от Apple **iPhone 4 - 7Plus** включительно. В них устройствах используется интерфейс [HDQ](https://www.ti.com/lit/an/slua408a/slua408a.pdf). Начиная с iPhone 8 используется [I²C](https://ru.wikipedia.org/wiki/I%C2%B2C).
+* Библиотека позволяет читать информацию с АКБ от Apple **iPhone 4 - 7Plus** включительно. В них используется интерфейс [HDQ](https://www.ti.com/lit/an/slua408a/slua408a.pdf). Начиная с iPhone 8 используется [I²C](https://ru.wikipedia.org/wiki/I%C2%B2C).
 * При использовании с микрокотроллерами, выводы которых **не толерантны к 5В**, **необходимо** использовать согласователь уровней, например [TXS0108E](https://www.ti.com/lit/ds/symlink/txs0108e.pdf)(HW-221) или подобный, иначе есть риск **спалить микроконтроллер!**
 
 ## Поддерживаемые платы
@@ -53,7 +53,7 @@ delayMicroseconds();
 ## API
 
 ### Основные методы
-* Проверка соединения. *Запрашивает два байта DEVICE_TYPE регистра CONTROL_STATUS*
+* Проверка соединения. *Запрашивает два байта DEVICE_TYPE регистра CONTROL_STATUS*. Костыль, но работает.
 ```C++
 bool isConnected(void);
 ```
@@ -163,7 +163,7 @@ uint8_t getBlockDataChecksum(void);
 ```
 
 ### Вспомогательные методы
-* байт из одиночного и слова из парного регистров
+* байт из одиночного и слово из парного регистров
 ```C++
 uint8_t readByte(uint8_t reg);
 uint16_t readWord(uint8_t low_reg, uint8_t high_reg);
@@ -172,7 +172,7 @@ uint16_t readWord(uint8_t low_reg, uint8_t high_reg);
 ```C++
 uint16_t readControlAddresses(void);
 ```
-* байт в одиночный и слова в парный регистры
+* байт в одиночный и слово в парный регистры
 ```C++
 void writeByte(uint8_t reg, uint8_t payload);
 void writeWord(uint8_t low_reg, uint8_t high_reg, uint8_t low_payload, uint8_t high_payload);
