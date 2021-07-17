@@ -1,6 +1,8 @@
 # HDQBATT
 ![Header Picture](images/header.jpg)
 
+* [Библиотека I2CBATT](https://github.com/S-LABc/I2CBATT)
+
 ## Содержание
 * [Описание](#описание)
 * [Особенности](#особенности)
@@ -19,14 +21,14 @@
 * Эта библиотека написана по мотивам [HDQLib](https://github.com/mozzwald/HDQLib) за авторством [mozzwald](https://github.com/mozzwald). На ней я уже делал [читалку АКБ iPhone](https://github.com/S-LABc/battery-check-HDQ).
 
 ## Особенности
-* Протокол [HDQ](https://www.ti.com/lit/an/slua408a/slua408a.pdf) реализован программно (софтверно), использует несколько стандартных функций [Arduino IDE](https://www.arduino.cc/en/software).
+* Протокол [HDQ](https://www.ti.com/lit/an/slua408a/slua408a.pdf) реализован программно (софтверно), использует несколько стандартных [функций Arduino IDE](https://www.arduino.cc/reference/en/).
 ```C++
 pinMode();
 digitalRead();
 digitalWrite();
 delayMicroseconds();
 ```
-* Библиотека позволяет читать информацию с АКБ от Apple **iPhone 4 - 7Plus** включительно. В них используется интерфейс [HDQ](https://www.ti.com/lit/an/slua408a/slua408a.pdf). Начиная с iPhone 8 используется [I²C](https://ru.wikipedia.org/wiki/I%C2%B2C).
+* Библиотека позволяет читать информацию с АКБ от Apple **iPhone 4 - 7Plus** включительно. В них используется интерфейс [HDQ](https://www.ti.com/lit/an/slua408a/slua408a.pdf). Начиная с iPhone 8 используется [I²C](https://ru.wikipedia.org/wiki/I%C2%B2C). *Для подключения по I²C есть библиотека* [I2CBATT](https://github.com/S-LABc/I2CBATT).
 * При использовании с микрокотроллерами, выводы которых **не толерантны к 5В**, **необходимо** использовать согласователь уровней, например [TXS0108E](https://www.ti.com/lit/ds/symlink/txs0108e.pdf)(HW-221) или подобный, иначе есть риск **спалить микроконтроллер!**
 
 ## Поддерживаемые платы
@@ -45,19 +47,25 @@ delayMicroseconds();
 | ESP8266 WeMos D1 R2 | [Arduino ESP8266](https://github.com/esp8266/Arduino) | [TXS0108E](https://www.ti.com/lit/ds/symlink/txs0108e.pdf) |
 | ESP32 Devkit V4 | [arduino-esp32](https://github.com/espressif/arduino-esp32) | [TXS0108E](https://www.ti.com/lit/ds/symlink/txs0108e.pdf) |
 | Arduino Nano | Встроенное | Нет |
-| Arduino Pro Mini | Встроенное | Нет |
 | Arduino Uno | Встроенное | Нет |
 | Arduino Leonardo R3 | Встроенное | Нет |
 | Arduino Pro Micro | Встроенное | Нет |
+| Arduino Pro Mini | Встроенное | Нет |
 
 ## API
 
+### Инициализация
+* Создать объект с именем (в данном случае HDQ), указав номер вывода микроконтроллера к которому подключен контакт HDQ АКБ.
+```C++
+HDQBATT HDQ (uint8_t pin);
+```
+
 ### Основные методы
-* Проверка соединения. *Запрашивает два байта DEVICE_TYPE регистра CONTROL_STATUS*. Костыль, но работает.
+* Проверить соединение с АКБ. *Запрашивает два байта DEVICE_TYPE череp регистр CONTROL_STATUS*. Костыль, но работает.
 ```C++
 bool isConnected(void);
 ```
-* Запрос через регистр **CONTROL_STATUS**
+* Запрос через регистр **CONTROL_STATUS**.
 ```C++
 uint16_t getControlStatus(void);
 bool getFlagSEPinIsActive(void);
@@ -77,7 +85,7 @@ bool getFlagRaTableUpdatesDisabled(void);
 bool getFlagCellVoltagesOK(void);
 bool getFlagQmaxUpdatesEnabled(void);
 ```
-* Запрос регистра **Flags()**
+* Запрос регистра **Flags()**.
 ```C++
 uint16_t getFlags(void);
 bool getFlagBatteryHighIndicating(void);
@@ -91,93 +99,91 @@ bool getFlagStateOfChargeThreshold1(void);
 bool getFlagStateOfChargeThresholdFinal(void);
 bool getFlagDischargingDetected(void);
 ```
-* Запрос **DEVICE_TYPE** через регистр *CONTROL_STATUS*
+* Запрос **DEVICE_TYPE** через регистр *CONTROL_STATUS.* Позволяет получить *модель* контроллера АКБ. Например, если контроллер bq27546, то результат будет 0x0546.
 ```C++
 uint16_t getDeviceType(void);
 ```
-* Запрос **FW_VERSION** через регистр *CONTROL_STATUS*
+* Запрос **FW_VERSION** через регистр *CONTROL_STATUS.* Позволяет получить *версию прошивки* контроллера АКБ.
 ```C++
 float getFirmwareVersion(void);
 ```
-* Запрос **HW_VERSION** через регистр *CONTROL_STATUS*
+* Запрос **HW_VERSION** через регистр *CONTROL_STATUS.* Позволяет получить *версию оборудования* контроллера АКБ.
 ```C++
 float getHardwareVersion(void);
 ```
-* Запрос регистра **Temperature()**
+* Запрос регистра **Temperature().** Позволяет получить *температуру контроллера* АКБ в градусах Кельвина, Цельсия, Фаренгейта.
 ```C++
 float getTemperatureKelvin(void);
 float getTemperatureCelsius(void);
 float getTemperatureFahrenheit(void);
 ```
-* Запрос регистра **Voltage()**
+* Запрос регистра **Voltage().** Позволяет получить *напряжение* на банке АКБ в милливольтах и вольтах.
 ```C++
 unsigned short getVoltageMilli(void);
 float getVoltage(void);
 ```
-* Запрос регистра **DesignCapacity()**
+* Запрос регистра **DesignCapacity().** Позволяет получить *заводскую емкость* банки в миллиамер-часах.
 ```C++
 unsigned short getDesignCapacity(void);
 ```
-* Запрос регистра **RemainingCapacity()**
+* Запрос регистра **RemainingCapacity().** Позволяет получить *оставшуюся емкость* с учетом износа АКБ в миллиамер-часах.
 ```C++
 unsigned short getRemainingCapacity(void);
 ```
-* Запрос регистра **FullChargeCapacity()**
+* Запрос регистра **FullChargeCapacity().** Позволяет получить *доступную для зарядки емкость* АКБ в миллиамер-часах.
 ```C++
 unsigned short getFullChargeCapacity(void);
 ```
-* Запрос регистра **AverageCurrent()**
+* Запрос регистра **AverageCurrent().** Позволяет получить *ток зарядки/разрядки* АКБ в миллиамерах и амперах.
 ```C++
 short getAverageCurrentMilli(void);
 float getAverageCurrent(void);
 ```
-* Запрос регистра **AveragePower()**
+* Запрос регистра **AveragePower().** Позволяет получить *мощность зарядки/разрядки* АКБ в милливаттах и ваттах.
 ```C++
 short getAveragePowerMilli(void);
 float getAveragePower(void);
 ```
-* Запрос регистра **CycleCount()**
+* Запрос регистра **CycleCount().** Позволяет получить *количество зарядок/разрядок* АКБ.
 ```C++
 unsigned short getCycleCount(void);
 ```
-* Запрос регистра **StateOfCharge()**
+* Запрос регистра **StateOfCharge().** Позволяет получить *уровень зарядки* АКБ в процентах.
 ```C++
 byte getStateOfCharge(void);
 ```
-* Запрос регистра **TimeToEmpty()**
+* Запрос регистра **TimeToEmpty().** Позволяет получить *врямя до полной разрядки* АКБ в минутах.
 ```C++
 unsigned short getTimeToEmpty(void);
 ```
-* Запрос регистров **Manufacturer Information Blocks**
+* Запрос регистров **Manufacturer Information Blocks.** Позволяет получить *данные о производителе* АКБ. Обычно в этих блоках серийные номера.
+* В докумментации от bq27545 и bq27546, **Block C** не описан, но в нем есть данные. *Смотрите [bq27541 Single Cell Li-Ion Battery Fuel Gauge for Battery Pack Integration](https://www.ti.com/lit/ds/symlink/bq27541.pdf)*.
 ```C++
 char* getManufacturerInfoBlockA(void);
 char* getManufacturerInfoBlockB(void);
-```
-Этот блок не описан в докумментации, но в нем есть информация. *Смотрите [bq27541 Single Cell Li-Ion Battery Fuel Gauge for Battery Pack Integration](https://www.ti.com/lit/ds/symlink/bq27541.pdf)*
-```C++
 char* getManufacturerInfoBlockC(void);
 ```
-* Запрос регистра **BlockDataChecksum()**
+* Запрос регистра **BlockDataChecksum().** Позволяет получить *контрольную сумму* регистров BlockData контроллрера.
 ```C++
 uint8_t getBlockDataChecksum(void);
 ```
 
 ### Вспомогательные методы
-* байт из одиночного и слово из парного регистров
+* прочитать байт из одиночного и слово из парного регистров.
 ```C++
 uint8_t readByte(uint8_t reg);
 uint16_t readWord(uint8_t low_reg, uint8_t high_reg);
 ```
-* слово из регистра Control()
+* прочитать слово из регистра **Control()**.
 ```C++
 uint16_t readControlAddresses(void);
 ```
-* байт в одиночный и слово в парный регистры
+* записать байт в одиночный и слово в парный регистры.
 ```C++
 void writeByte(uint8_t reg, uint8_t payload);
 void writeWord(uint8_t low_reg, uint8_t high_reg, uint8_t low_payload, uint8_t high_payload);
 ```
-* слово в регистр Control()
+* записать слово в регистр **Control()**.
 ```C++
 void writeControlAddresses(uint8_t low_payload, uint8_t high_payload);
 ```
@@ -201,9 +207,10 @@ bool setTimeFailTries(uint16_t new_delay);
 ```
 
 ## Установка
-[Скачать ZIP-архив](https://github.com/S-LABc/HDQBATT/archive/refs/heads/main.zip) этого репозитория. Запустить [Arduino IDE](https://www.arduino.cc/en/software). Выбрать *Скетч* -> *Подключить библиотеку* -> *Добавить .ZIP библиотеку*. В появившемся окне выбрать скаченный архив. Более [наглядная](https://wiki.iarduino.ru/page/Installing_libraries) инструкция. Изучите скетч из примеров, в нем показано важное.
+[Скачать ZIP-архив](https://github.com/S-LABc/HDQBATT/archive/refs/heads/main.zip) этого репозитория. Запустить [Arduino IDE](https://www.arduino.cc/en/software). Выбрать *Скетч* -> *Подключить библиотеку* -> *Добавить .ZIP библиотеку*. В появившемся окне выбрать скаченный архив. Более [наглядная](https://wiki.iarduino.ru/page/Installing_libraries) инструкция. **Не забудьте изучить скетч из примеров.**
 
 ## Подключение АКБ
+![Connecting Picture](images/connecting.jpg)
 * Для корректной передачи данных, необходимо между контактом **HDQ** и **+VBATT** АКБ подключить резистор  номиналом 4.7кОм - 10кОм.
 * *Можно* подключить резистор к контакту +5В, но делать этого я **не рекомендую**, если контакт **не толерантен к 5В.**
 
