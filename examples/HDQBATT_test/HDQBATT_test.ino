@@ -19,14 +19,15 @@
  *
  ** Если нужно получить данные из регистров, для которых нет готовых функций,
  ** то для этого есть доплнительные функции.
- *** readByte(reg) - прочитать один байт из одиного регистра 
+ *** readByte(reg) - прочитать один байт из одиночного регистра 
  *** readWord(low_reg, high_reg) - прочитать пару байт из парного регистра
  *** readControlAddresses() - прочитать пару байт из регистра Control()
  *** writeByte(reg, payload) - записать один байт в один регистр
  *** writeWord(low_reg, high_reg, low_payload, high_payload) - записать пару байт в парный регистр
  *** writeControlAddresses(low_payload, high_payload) - записать пару байт в регистр Control()
  * 
- * Проект на GitHub - https://github.com/S-LABc/HDQBATT
+ * Проект HDQBATT на GitHub - https://github.com/S-LABc/HDQBATT
+ * Проект I2CBATT на GitHub - https://github.com/S-LABc/I2CBATT
  * 
  * Контакты:
  ** YouTube - https://www.youtube.com/channel/UCbkE52YKRphgkvQtdwzQbZQ
@@ -67,7 +68,8 @@ void setup() {
   
   Serial.begin(115200);
   
-  while (!HDQ.isConnected()) { // Пока не подключен АКБ
+  // Пока не подключен АКБ
+  while (!HDQ.isConnected()) {
     // Выводим сообщение об отсутствии АКБ
     Serial.println("Battery not detected"); 
     delay(1000);
@@ -75,7 +77,8 @@ void setup() {
 }
 
 void loop() {
-  if (HDQ.isConnected()) { // Если АКБ подключен
+  // Если АКБ подключен
+  if (HDQ.isConnected()) {
     // Читаем данные и выводим в "Монитор порта"
     readBatteryData();
   }

@@ -4,7 +4,6 @@
  ** Можно подключится и к другим контроллерам семейства bq2754x
  * 
  ** Протокол HDQ реализован программно и использует стандартные функции Ардуино
- ** Функции:
  ** pinMode()
  ** digitalRead()
  ** digitalWrite()
@@ -26,7 +25,8 @@
  ** https://www.ti.com/lit/ds/symlink/bq27425-g2a.pdf
  ** https://www.ti.com/lit/ds/symlink/bq27546-g1.pdf
  * 
- * Проект на GitHub - https://github.com/S-LABc/HDQBATT
+ * Проект HDQBATT на GitHub - https://github.com/S-LABc/HDQBATT
+ * Проект I2CBATT на GitHub - https://github.com/S-LABc/I2CBATT
  * 
  * Контакты:
  ** YouTube - https://www.youtube.com/channel/UCbkE52YKRphgkvQtdwzQbZQ
@@ -184,9 +184,6 @@ enum FlagsBitDefinitions {
 #define CMD_STATE_OF_CHARGE_L 0x2C
 #define CMD_STATE_OF_CHARGE_H 0x2D
 
-#define EXTD_CMD_PACK_CONFIG_L 0x3A
-#define EXTD_CMD_PACK_CONFIG_H 0x3B
-
 #define EXTD_CMD_DESIGN_CAPACITY_L 0x3C
 #define EXTD_CMD_DESIGN_CAPACITY_H 0x3D
 
@@ -203,17 +200,18 @@ enum FlagsBitDefinitions {
 
 class HDQBATT {
   private:
-	HDQDelay hdq_delay;
-    uint8_t _pin;
-    uint8_t _block_data[EXTD_CMD_BLOCK_DATA_H - EXTD_CMD_BLOCK_DATA_L];
+    HDQDelay _hdq_delay; // Структура с задержками протокола HDQ
+	
+    uint8_t _pin; // Вывод микроконтроллера
+    uint8_t _block_data[EXTD_CMD_BLOCK_DATA_H - EXTD_CMD_BLOCK_DATA_L]; // Массив для данных из регистров 0x40-0x5f
     
-    void doBreak(void); // Сигнал сброса на линии
+    void doBreak(void); // Сигнал сброса на линии HDQ
     void sendByteBitByBit(uint8_t payload); // Передача байта побитово
-
-    void pullBlockData(uint8_t str[]);
+    void pullBlockData(uint8_t str[]); // Заполнение массива _block_data
     
   public:
-    HDQBATT(uint8_t pin);
+    HDQBATT(uint8_t pin); // Конструктор
+	
     // Для изменения значений задержек протокола HDQ
     // 7.13 HDQ Communication Timing Characteristics
     bool setTimeCYCH(uint8_t new_delay);
@@ -225,8 +223,8 @@ class HDQBATT {
     bool setTimeRSPS(uint16_t new_delay);
     bool setTimeB(uint16_t new_delay);
     bool setTimeBR(uint16_t new_delay);
-    bool setTimeFailTries(uint16_t new_delay); // Не из даташита
-    // Для работы с произвольными регистрами (смотреть datasheet)
+    bool setTimeFailTries(uint16_t new_delay); // Не из datasheet
+    // Для работы с произвольными регистрами из datasheet
     uint8_t readByte(uint8_t reg);
     uint16_t readWord(uint8_t low_reg, uint8_t high_reg);
     uint16_t readControlAddresses(void);
