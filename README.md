@@ -126,7 +126,7 @@ float getVoltage(void);
 ```C++
 unsigned short getDesignCapacity(void);
 ```
-* Запрос регистра **RemainingCapacity().** Позволяет получить *оставшуюся емкость* с учетом износа АКБ в миллиамер-часах.
+* Запрос регистра **RemainingCapacity().** Позволяет получить *оставшуюся емкость* АКБ в миллиамер-часах.
 ```C++
 unsigned short getRemainingCapacity(void);
 ```
