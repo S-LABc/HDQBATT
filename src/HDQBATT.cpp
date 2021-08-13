@@ -235,7 +235,7 @@ uint8_t HDQBATT::readByte(uint8_t reg) {
     delayMicroseconds(_hdq_delay.t_cycd - _hdq_delay.t_dw0);
   }
 
-  delayMicroseconds(hdq_delay.t_b);
+  delayMicroseconds(_hdq_delay.t_b);
 
   return result;
 }
