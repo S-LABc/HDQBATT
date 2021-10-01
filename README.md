@@ -207,7 +207,7 @@ bool setTimeFailTries(uint16_t new_delay);
 ```
 
 ## Установка
-[Скачать ZIP-архив](https://github.com/S-LABc/HDQBATT/archive/refs/heads/main.zip) этого репозитория. Запустить [Arduino IDE](https://www.arduino.cc/en/software). Выбрать *Скетч* -> *Подключить библиотеку* -> *Добавить .ZIP библиотеку*. В появившемся окне выбрать скаченный архив. Более [наглядная](https://wiki.iarduino.ru/page/Installing_libraries) инструкция. **Не забудьте изучить скетч из примеров.**
+Скачать ZIP-архив нужной версии из раздела [Releases](https://github.com/S-LABc/HDQBATT/releases). Запустить [Arduino IDE](https://www.arduino.cc/en/software). Выбрать *Скетч* -> *Подключить библиотеку* -> *Добавить .ZIP библиотеку*. В появившемся окне выбрать скаченный архив. Более [наглядная](https://wiki.iarduino.ru/page/Installing_libraries) инструкция. **Не забудьте изучить скетч из примеров.**
 
 ## Подключение АКБ
 ![Connecting Picture](images/connecting.jpg)
