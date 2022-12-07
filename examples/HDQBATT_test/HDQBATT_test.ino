@@ -131,9 +131,9 @@ void readBatteryData() {
   Serial.print("0x");
   Serial.print(HDQ.getFlags(), HEX); // hex значение регистра Flags()
   Serial.print(" RSVD(5)="); // Так можно достать отдельныве биты
-  Serial.print((HDQ.getFlags() >> BIT_DEFINITIONS_RSVD_5) & 1);
+  Serial.print((HDQ.getFlags() >> HDQBATT_BIT_DEFINITIONS_RSVD_5) & 1);
   Serial.print("|RSVD(4)="); // Так можно достать отдельныве биты
-  Serial.print((HDQ.getFlags() >> BIT_DEFINITIONS_RSVD_4) & 1);
+  Serial.print((HDQ.getFlags() >> HDQBATT_BIT_DEFINITIONS_RSVD_4) & 1);
   Serial.print("|BATHI="); // Высокий уровень зяряда
   Serial.print(HDQ.getFlagBatteryHighIndicating());
   Serial.print("|BATLOW="); // Низкий уровень зяряда
@@ -141,17 +141,17 @@ void readBatteryData() {
   Serial.print("|CHG_INH="); // Запрет зарядки при высокой температуре
   Serial.print(HDQ.getFlagChargeInhibitindicates());
   Serial.print("|RSVD(3)="); // Так можно достать отдельныве биты
-  Serial.print((HDQ.getFlags() >> BIT_DEFINITIONS_RSVD_3) & 1);
+  Serial.print((HDQ.getFlags() >> HDQBATT_BIT_DEFINITIONS_RSVD_3) & 1);
   Serial.print("|FC="); // Полностью зажен
   Serial.print(HDQ.getFlagFullChargedIsDetected());
   Serial.print("RSVD(2)="); // Так можно достать отдельныве биты
-  Serial.print((HDQ.getFlags() >> BIT_DEFINITIONS_RSVD_2) & 1);
+  Serial.print((HDQ.getFlags() >> HDQBATT_BIT_DEFINITIONS_RSVD_2) & 1);
   Serial.print("|CHG_SUS="); // Приостановка зарядки
   Serial.print(HDQ.getFlagChargeSuspend());
   Serial.print("|RSVD(1)="); // Так можно достать отдельныве биты
-  Serial.print((HDQ.getFlags() >> BIT_DEFINITIONS_RSVD_1) & 1);
+  Serial.print((HDQ.getFlags() >> HDQBATT_BIT_DEFINITIONS_RSVD_1) & 1);
   Serial.print("|RSVD(0)="); // Так можно достать отдельныве биты
-  Serial.print((HDQ.getFlags() >> BIT_DEFINITIONS_RSVD_0) & 1);
+  Serial.print((HDQ.getFlags() >> HDQBATT_BIT_DEFINITIONS_RSVD_0) & 1);
   Serial.print("|IMAX="); // Готовность вычислений Imax()
   Serial.print(HDQ.getFlagIndicatesComputedImax());
   Serial.print("|CHG="); // Разрешена быстрая зарядка
